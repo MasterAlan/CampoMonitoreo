@@ -2,19 +2,13 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 
-// UnityWebRequest.Get example
-
-// Access a website and use UnityWebRequest.Get to download a page.
-// Also try to download a non-existing page. Display the error.
-
 public class CustomRequest : MonoBehaviour
 {
     public string url;
-    public GameObject lodo;
+    public SensorManager sensorManager;
 
     void Start()
     {
-        // A correct website page.
         StartCoroutine(GetRequest(url));
     }
 
@@ -38,24 +32,9 @@ public class CustomRequest : MonoBehaviour
                     Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);
                     break;
                 case UnityWebRequest.Result.Success:
-                    // Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
                     string jsonString = webRequest.downloadHandler.text;
-
-                    // PokeInfo pokeInfo = JsonUtility.FromJson<PokeInfo>(jsonString);
-                    // Debug.Log("Count: " + pokeInfo.count);
-
                     SensorInfo sensorInfo = JsonUtility.FromJson<SensorInfo>(jsonString);
-
-                    if (sensorInfo.humedad > 0.5f)
-                    {
-                        lodo.GetComponent<MeshRenderer>().material.color = Color.green;
-                    }
-                    else
-                    {
-                        lodo.GetComponent<MeshRenderer>().material.color = Color.red;
-                    }
-
-                    Debug.Log("Sensors: " + sensorInfo.sensores.Count);
+                    sensorManager.SetupSensors(sensorInfo);
                     break;
             }
         }
