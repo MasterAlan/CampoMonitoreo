@@ -7,7 +7,7 @@ public class CustomRequest : MonoBehaviour
     public string url;
     public SensorManager sensorManager;
 
-    void Start()
+    public void SendRequest()
     {
         StartCoroutine(GetRequest(url));
     }
